@@ -1,0 +1,308 @@
+:root {
+    --bg-dark: #08090a;
+    --card-bg: #111315;
+    --border-color: rgba(255, 255, 255, 0.08);
+    --gi-color: #4ade80;
+    --hi3-color: #f472b6;
+    --hsr-color: #60a5fa;
+    --zzz-color: #facc15;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: #efefef;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- Header & Subheader --- */
+.navbar {
+    background: rgba(8, 9, 10, 0.95);
+    backdrop-filter: blur(15px);
+    border-bottom: 1px solid var(--border-color);
+    padding: 0.6rem 0;
+}
+
+.sub-nav {
+    background: rgba(255, 255, 255, 0.02);
+    border-bottom: 1px solid var(--border-color);
+    padding: 4px 0;
+    font-size: 0.75rem;
+    font-family: "JetBrains Mono", monospace;
+}
+
+.t-d {
+    color: #f87171;
+}
+
+.t-w {
+    color: #fbbf24;
+}
+
+.t-m {
+    color: #34d399;
+}
+
+.timer-val {
+    color: #fff;
+    font-weight: 500;
+}
+
+/* --- Energy Widgets --- */
+.energy-grid-nav {
+    display: flex;
+    gap: 8px;
+}
+
+.energy-box {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 6px 12px;
+    min-width: 155px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.2s ease;
+}
+
+.energy-box:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: var(--game-accent);
+}
+
+.energy-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2px;
+}
+
+.energy-img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+.energy-val-group {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--game-accent);
+}
+
+.energy-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.75rem;
+    color: #fff;
+    font-weight: 500;
+}
+
+/* --- Main Dashboard --- */
+.main-content {
+    flex: 1;
+    margin-top: 20px;
+}
+
+.game-section {
+    background: var(--card-bg);
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+    margin-bottom: 30px;
+    display: none;
+    overflow: hidden;
+}
+
+.game-section.visible {
+    display: block;
+}
+
+.game-header {
+    padding: 12px 30px;
+    background: rgba(255, 255, 255, 0.02);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.game-title {
+    font-weight: 800;
+    font-size: 1.2rem;
+    margin: 0;
+    text-transform: uppercase;
+    color: var(--game-accent);
+    letter-spacing: 1px;
+}
+
+.task-grid {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.task-column {
+    flex: 1;
+    min-width: 300px;
+    padding: 25px 30px;
+    border-right: 1px solid var(--border-color);
+}
+
+.task-column:last-child {
+    border-right: none;
+}
+
+.column-title {
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: #71717a;
+    letter-spacing: 2px;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+/* --- Checklist Items --- */
+.checklist-wrapper {
+    display: flex;
+    align-items: stretch;
+    margin-bottom: 5px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.02);
+    transition: background 0.2s;
+}
+
+.checklist-wrapper:hover {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.checklist-main {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+.checklist-toggle-box {
+    width: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.03);
+    border-left: 1px solid var(--border-color);
+    cursor: pointer;
+    color: #fff;
+    font-size: 0.8rem;
+    transition: background 0.2s;
+}
+
+.checklist-toggle-box:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.checklist-toggle-box.active {
+    background: var(--game-accent);
+    color: #000;
+}
+
+.subtask-container {
+    margin-left: 20px;
+    border-left: 2px solid var(--border-color);
+    padding-left: 10px;
+    margin-bottom: 10px;
+    display: none;
+}
+
+.subtask-container.open {
+    display: block;
+}
+
+.form-check-input {
+    width: 17px;
+    height: 17px;
+    margin-right: 12px;
+    cursor: pointer;
+    background-color: #1a1d21;
+    border-color: #333;
+}
+
+.form-check-input:checked {
+    background-color: var(--game-accent);
+    border-color: var(--game-accent);
+}
+
+.task-label {
+    font-size: 0.95rem;
+    color: #efefef;
+    transition: color 0.2s;
+}
+
+.strikethrough {
+    text-decoration: line-through;
+    color: #4b5563 !important;
+}
+
+.toggle-arrow {
+    transition: transform 0.3s ease;
+    display: inline-block;
+}
+
+.rotated {
+    transform: rotate(180deg);
+}
+
+footer {
+    border-top: 1px solid var(--border-color);
+    padding: 20px 0;
+    margin-top: 50px;
+    background: rgba(255, 255, 255, 0.01);
+    color: #71717a;
+    font-size: 0.7rem;
+}
+
+.gi-theme {
+    --game-accent: var(--gi-color);
+}
+
+.hi3-theme {
+    --game-accent: var(--hi3-color);
+}
+
+.hsr-theme {
+    --game-accent: var(--hsr-color);
+}
+
+.zzz-theme {
+    --game-accent: var(--zzz-color);
+}
+
+/* --- Responsive Layout --- */
+@media (max-width: 1200px) {
+    .navbar .container {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .energy-grid-nav {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .sub-nav .container {
+        justify-content: center !important;
+    }
+}
+
+@media (max-width: 992px) {
+    .task-grid {
+        flex-direction: column;
+    }
+
+    .task-column {
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+    }
+}
