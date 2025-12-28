@@ -6,7 +6,16 @@ export const games = [
         cap: 200,
         rate: 8,
         img: "genshin-resin.png",
-        daily: ["Login", "Commissions", "Expedition", "Resin", "Traveler's Tales"],
+        daily: [
+            "Login", 
+            "Commissions", 
+            "Expedition", 
+            "Resin", 
+            // Changed to object to make it hideable
+            { label: "Traveler's Tales", optional: true },
+            // New Item
+            { label: "Blessing of the Welkin Moon", optional: true } 
+        ],
         weekly: ["Trounce Domain", "Cook", "Forge", "Realm Depot", "Furnishings", "Traveling Salesman"],
         monthly: ["Stardust Exchange"],
     },

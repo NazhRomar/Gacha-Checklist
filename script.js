@@ -72,6 +72,8 @@ function drawItem(gid, type, idx, t) {
     const checked = state.checked[id] ? "checked" : "";
     const open = state.menus.includes(id);
 
+    if (state.hidden.includes(id)) return "";
+
     // FIX: Calculate Counter Logic
     let counterLabel = "";
     if (isObj) {
@@ -189,14 +191,34 @@ function getReset(type) {
 }
 
 function updateMenu() {
-    // We use window.toggleConfig(...) instead of trying to access 'state' directly
     let html = `<li><a class="dropdown-item d-flex align-items-center gap-2" href="#" onclick="toggleConfig('monthly'); return false;">
         <input type="checkbox" class="form-check-input mt-0" ${state.hideMonthly ? "checked" : ""}> Hide Monthly Column
     </a></li><hr class="dropdown-divider">`;
 
+    // 1. Game Toggles
+    html += `<li class="dropdown-header">Games</li>`;
     html += games.map(g => `<li><a class="dropdown-item d-flex align-items-center gap-2" href="#" onclick="toggleConfig('game', '${g.id}'); return false;">
         <input type="checkbox" class="form-check-input mt-0" ${!state.hidden.includes(g.id) ? "checked" : ""}> ${g.name}
     </a></li>`).join("");
+
+    // 2. Optional Item Toggles
+    // We scan all games for items marked "optional: true"
+    let optionalItemsHtml = "";
+    games.forEach(g => {
+        g.daily.forEach((t, i) => {
+            if (typeof t === 'object' && t.optional) {
+                const taskId = `${g.id}-d-${i}`;
+                const isVisible = !state.hidden.includes(taskId);
+                optionalItemsHtml += `<li><a class="dropdown-item d-flex align-items-center gap-2" href="#" onclick="toggleConfig('game', '${taskId}'); return false;">
+                    <input type="checkbox" class="form-check-input mt-0" ${isVisible ? "checked" : ""}> ${g.name}: ${t.label}
+                </a></li>`;
+            }
+        });
+    });
+
+    if (optionalItemsHtml) {
+        html += `<hr class="dropdown-divider"><li class="dropdown-header">Optional Items</li>` + optionalItemsHtml;
+    }
 
     document.getElementById("visibility-menu").innerHTML = html;
 }
