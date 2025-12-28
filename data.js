@@ -11,9 +11,7 @@ export const games = [
             "Commissions", 
             "Expedition", 
             "Resin", 
-            // Changed to object to make it hideable
             { label: "Traveler's Tales", optional: true },
-            // New Item
             { label: "Blessing of the Welkin Moon", optional: true } 
         ],
         weekly: ["Trounce Domain", "Cook", "Forge", "Realm Depot", "Furnishings", "Traveling Salesman"],

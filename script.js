@@ -67,16 +67,25 @@ function buildDashboard() {
 
 function drawItem(gid, type, idx, t) {
     const id = `${gid}-${type}-${idx}`;
-    const isObj = typeof t === "object";
-    const label = isObj ? t.label : t;
-    const checked = state.checked[id] ? "checked" : "";
-    const open = state.menus.includes(id);
-
+    
+    // SAFETY FIX: If old data exists without the 'hidden' array, add it now
+    if (!state.hidden) state.hidden = [];
+    
     if (state.hidden.includes(id)) return "";
 
-    // FIX: Calculate Counter Logic
+    const isObj = typeof t === "object";
+    // CRITICAL FIX: Only treat it as a "Parent" task if it actually has subtasks (.sub)
+    const hasSub = isObj && Array.isArray(t.sub);
+    
+    const label = isObj ? t.label : t;
+    const checked = state.checked[id] ? "checked" : "";
+    
+    // Only use the dropdown menu logic if it has subtasks
+    const open = hasSub && state.menus.includes(id);
+
+    // Calculate counter only if subtasks exist
     let counterLabel = "";
-    if (isObj) {
+    if (hasSub) {
         const done = t.sub.filter((_, si) => state.checked[`${id}-s-${si}`]).length;
         const total = t.min || t.sub.length;
         counterLabel = ` <span class="text-secondary">(${done}/${total})</span>`;
@@ -84,13 +93,13 @@ function drawItem(gid, type, idx, t) {
 
     return `
         <div class="checklist-wrapper">
-            <div class="checklist-main" onclick="toggleTask('${id}', ${isObj}, ${isObj ? t.sub.length : 0})">
-                <input type="checkbox" class="form-check-input" ${checked} onclick="event.stopPropagation(); toggleTask('${id}', ${isObj}, ${isObj ? t.sub.length : 0})">
+            <div class="checklist-main" onclick="toggleTask('${id}', ${hasSub}, ${hasSub ? t.sub.length : 0})">
+                <input type="checkbox" class="form-check-input" ${checked} onclick="event.stopPropagation(); toggleTask('${id}', ${hasSub}, ${hasSub ? t.sub.length : 0})">
                 <span class="task-label ${state.checked[id] ? "strikethrough" : ""}">${label}${counterLabel}</span>
             </div>
-            ${isObj ? `<div class="checklist-toggle-box ${open ? "active" : ""}" onclick="toggleMenu('${id}', event)"><span class="toggle-arrow ${open ? "rotated" : ""}">▼</span></div>` : ""}
+            ${hasSub ? `<div class="checklist-toggle-box ${open ? "active" : ""}" onclick="toggleMenu('${id}', event)"><span class="toggle-arrow ${open ? "rotated" : ""}">▼</span></div>` : ""}
         </div>
-        ${isObj ? `<div class="subtask-container ${open ? "open" : ""}">
+        ${hasSub ? `<div class="subtask-container ${open ? "open" : ""}">
             ${t.sub.map((s, si) => `
                 <div class="checklist-wrapper">
                     <div class="checklist-main" onclick="toggleTask('${id}-s-${si}')">
