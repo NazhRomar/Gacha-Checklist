@@ -217,22 +217,58 @@ window.toggleConfig = (type, id) => {
 };
 
 // --- Init ---
+
+// 1. Daily Reset Check (24 hours = 86400000 ms)
 if (state.lastD < getReset("d") - 86400000) {
     games.forEach((g) => {
         g.daily.forEach((t, i) => {
-            // 1. Delete the main task key
             delete state.checked[`${g.id}-d-${i}`];
-
-            // 2. Check if this task has sub-items (like ZZZ Errands) and delete them too
+            // Handle subtasks if they exist
             if (typeof t === "object" && t.sub) {
-                t.sub.forEach((_, si) => {
-                    delete state.checked[`${g.id}-d-${i}-s-${si}`];
-                });
+                t.sub.forEach((_, si) => delete state.checked[`${g.id}-d-${i}-s-${si}`]);
             }
         });
     });
-    
     state.lastD = Date.now();
+    window.save(true);
+}
+
+// 2. Weekly Reset Check (7 days = 604800000 ms)
+if (state.lastW < getReset("w") - 604800000) {
+    games.forEach((g) => {
+        g.weekly.forEach((t, i) => {
+            delete state.checked[`${g.id}-w-${i}`];
+            
+            // Handle subtasks for weekly items (future-proofing)
+            if (typeof t === "object" && t.sub) {
+                t.sub.forEach((_, si) => delete state.checked[`${g.id}-w-${i}-s-${si}`]);
+            }
+        });
+    });
+    state.lastW = Date.now();
+    window.save(true);
+}
+
+// 3. Monthly Reset Check
+// We calculate the "previous month's reset" by taking the next reset and subtracting a month
+const nextMonthlyReset = new Date(getReset("m"));
+const currentMonthlyReset = new Date(nextMonthlyReset);
+currentMonthlyReset.setMonth(currentMonthlyReset.getMonth() - 1);
+
+if (state.lastM < currentMonthlyReset.getTime()) {
+    games.forEach((g) => {
+        // Monthly tasks often don't have subtasks in your data, but good to keep the structure
+        if (g.monthly) {
+            g.monthly.forEach((t, i) => {
+                delete state.checked[`${g.id}-m-${i}`];
+                
+                if (typeof t === "object" && t.sub) {
+                    t.sub.forEach((_, si) => delete state.checked[`${g.id}-m-${i}-s-${si}`]);
+                }
+            });
+        }
+    });
+    state.lastM = Date.now();
     window.save(true);
 }
 
