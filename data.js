@@ -53,7 +53,10 @@ export const games = [
         rate: 6,
         img: "zzz-battery.png",
         daily: [
-            "Login", "Dennies", "Battery Charge",
+            "Login",
+            "Dennies",
+            "Battery Charge",
+            { label: "Agent Trust", optional: true },
             {
                 label: "Errands",
                 min: 4,
